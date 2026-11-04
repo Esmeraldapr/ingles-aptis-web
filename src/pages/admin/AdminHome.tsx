@@ -63,7 +63,7 @@ export default function AdminHome() {
 
   return (
     <div>
-      <PageTitle>Administración</PageTitle>
+      <PageTitle sub="Cursos, lecciones, ejercicios y alumnos.">🛠️ Administración</PageTitle>
       <div className="-mt-4 mb-8 flex flex-wrap gap-3">
         <button className="btn btn-primary" onClick={() => setEditing(blank)}>Nuevo curso</button>
         <Link to="/admin/alumnos" className="btn btn-ghost">Alumnos y estadísticas</Link>

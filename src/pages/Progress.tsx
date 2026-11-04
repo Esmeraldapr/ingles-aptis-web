@@ -1,12 +1,12 @@
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { useAuth } from '../hooks/useAuth'
 import { useMyProgress, useStudentStats, useSubmissionDays } from '../hooks/queries'
-import { ErrorBox, PageTitle, SkillDot, Spinner } from '../components/ui'
+import { ErrorBox, PageTitle, SkillDot, Spinner, StatTile } from '../components/ui'
 import { SKILL_LABEL, skillOf, splitTitle } from '../lib/lessons'
 import type { Skill } from '../types'
 
-const INK = '#1b2a4a'
-const GRID = '#dce6f5'
+const INK = '#14b8a6'
+const GRID = '#d9e8f0'
 const TICK = { fill: '#56657d', fontSize: 13 }
 
 function dayKey(d: Date) {
@@ -64,21 +64,14 @@ export default function Progress() {
 
   return (
     <div>
-      <PageTitle>Mi progreso</PageTitle>
+      <PageTitle sub="Tu racha de días y cómo evolucionan tus aciertos.">📊 Mi progreso</PageTitle>
 
-      <dl className="mb-12 grid grid-cols-2 gap-x-6 gap-y-5 border-y-2 border-ink py-5 sm:grid-cols-4">
-        {[
-          ['Racha de estudio', `${s.streak_days} ${s.streak_days === 1 ? 'día' : 'días'}`],
-          ['Aciertos', s.accuracy != null ? `${Math.round(s.accuracy)}%` : '—'],
-          ['Respuestas enviadas', String(s.total_submissions)],
-          ['Nota media por test', s.avg_score != null ? `${Math.round(s.avg_score)}%` : '—'],
-        ].map(([k, v]) => (
-          <div key={k}>
-            <dt className="text-sm text-slate">{k}</dt>
-            <dd className="font-[family-name:var(--font-display)] text-4xl font-extrabold">{v}</dd>
-          </div>
-        ))}
-      </dl>
+      <div className="mb-12 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <StatTile tone="pink" icon="🔥" value={`${s.streak_days} ${s.streak_days === 1 ? 'día' : 'días'}`} label="Racha de estudio" />
+        <StatTile tone="blue" icon="✅" value={s.accuracy != null ? `${Math.round(s.accuracy)}%` : '—'} label="Aciertos" />
+        <StatTile tone="teal" icon="📚" value={String(s.total_submissions)} label="Respuestas enviadas" />
+        <StatTile tone="amber" icon="⭐" value={s.avg_score != null ? `${Math.round(s.avg_score)}%` : '—'} label="Nota media por test" />
+      </div>
 
       <div className="grid gap-10 lg:grid-cols-2">
         <section aria-labelledby="act">
@@ -110,7 +103,7 @@ export default function Progress() {
                   </span>
                 </div>
                 <div className="h-3 overflow-hidden rounded-full bg-rule" aria-hidden>
-                  <div className="h-full rounded-full bg-ink" style={{ width: `${k.media}%` }} />
+                  <div className="h-full rounded-full bg-[linear-gradient(90deg,#14b8a6_0%,#36ecde_60%,#3b82f6_100%)]" style={{ width: `${k.media}%` }} />
                 </div>
               </li>
             ))}

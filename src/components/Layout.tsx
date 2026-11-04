@@ -1,93 +1,88 @@
-import { useState } from 'react'
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 
-function Logo() {
-  return (
-    <Link to="/" className="flex items-center gap-2 font-[family-name:var(--font-display)] text-lg font-extrabold">
-      <span className="flex gap-1" aria-hidden>
-        <span className="size-4 rounded-full border-2 border-ink" />
-        <span className="size-4 rounded-full bg-highlight ring-2 ring-ink" />
-        <span className="size-4 rounded-full border-2 border-ink" />
-      </span>
-      Hoja de respuestas
-    </Link>
-  )
-}
+const NAV = [
+  { to: '/panel', label: 'Dashboard', icon: '🏠' },
+  { to: '/cursos', label: 'Cursos', icon: '📚' },
+  { to: '/progreso', label: 'Mi progreso', icon: '📊' },
+  { to: '/perfil', label: 'Mi perfil', icon: '👤' },
+]
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
-  `rounded-full px-3 py-1.5 font-bold transition-colors ${isActive ? 'bg-ink text-paper' : 'hover:bg-rule'}`
+  `flex items-center gap-3 rounded-xl border px-3 py-2.5 font-semibold whitespace-nowrap transition ${
+    isActive
+      ? 'border-menta bg-menta text-ink shadow-[0_0_14px_rgba(54,236,222,.6)]'
+      : 'border-transparent text-white/90 hover:border-menta/25 hover:bg-menta/10 hover:text-menta'
+  }`
+
+/** Páginas sin menú lateral (portada y acceso) */
+const PUBLIC = ['/', '/entrar', '/registro', '/recuperar', '/nueva-contrasena']
 
 export function Layout() {
-  const { session, isStaff, signOut } = useAuth()
+  const { session, profile, isStaff, signOut } = useAuth()
   const navigate = useNavigate()
-  const [open, setOpen] = useState(false)
+  const { pathname } = useLocation()
 
-  const links = session
-    ? [
-        { to: '/panel', label: 'Mi panel' },
-        { to: '/cursos', label: 'Cursos' },
-        { to: '/progreso', label: 'Progreso' },
-        { to: '/perfil', label: 'Perfil' },
-        ...(isStaff ? [{ to: '/admin', label: 'Administración' }] : []),
-      ]
-    : [{ to: '/cursos', label: 'Cursos' }]
-
-  return (
-    <div className="flex min-h-screen flex-col">
-      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:bg-paper focus:p-2">
-        Saltar al contenido
-      </a>
-      <header className="sticky top-0 z-30 border-b-2 border-ink bg-paper/95 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-          <Logo />
-          <button
-            className="btn btn-ghost px-3 py-1.5 text-sm md:hidden"
-            aria-expanded={open}
-            aria-controls="main-nav"
-            onClick={() => setOpen((o) => !o)}
-          >
-            Menú
-          </button>
-          <nav
-            id="main-nav"
-            aria-label="Principal"
-            className={`${open ? 'flex' : 'hidden'} absolute left-0 right-0 top-full flex-col gap-1 border-b-2 border-ink bg-paper p-3 md:static md:flex md:flex-row md:items-center md:border-0 md:p-0`}
-          >
-            {links.map((l) => (
-              <NavLink key={l.to} to={l.to} className={linkClass} onClick={() => setOpen(false)}>
-                {l.label}
-              </NavLink>
-            ))}
-            {session ? (
-              <button
-                className="rounded-full px-3 py-1.5 text-left text-slate hover:bg-rule"
-                onClick={async () => {
-                  await signOut()
-                  navigate('/')
-                }}
-              >
-                Cerrar sesión
-              </button>
-            ) : (
-              <>
-                <NavLink to="/entrar" className={linkClass} onClick={() => setOpen(false)}>
-                  Entrar
-                </NavLink>
-                <Link to="/registro" className="btn btn-primary text-sm" onClick={() => setOpen(false)}>
-                  Crear cuenta
-                </Link>
-              </>
-            )}
-          </nav>
-        </div>
-      </header>
-      <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
+  if (!session || PUBLIC.includes(pathname)) {
+    return (
+      <main id="main" className="min-h-screen">
         <Outlet />
       </main>
-      <footer className="border-t border-rule py-6 text-center text-sm text-slate">
-        Práctica personal del examen Aptis
-      </footer>
+    )
+  }
+
+  const links = isStaff ? [...NAV, { to: '/admin', label: 'Administración', icon: '🛠️' }] : NAV
+
+  return (
+    <div className="min-h-screen lg:flex">
+      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:bg-white focus:p-2">
+        Saltar al contenido
+      </a>
+      <aside
+        className="sticky top-0 z-30 flex flex-col gap-4 border-b-2 border-menta bg-[radial-gradient(circle_at_0%_0%,rgba(54,236,222,.16)_0%,transparent_40%),linear-gradient(180deg,#00203f_0%,#05305e_100%)] px-4 py-4 text-white shadow-[4px_0_18px_-8px_rgba(54,236,222,.45)] lg:h-screen lg:w-64 lg:shrink-0 lg:border-r-2 lg:border-b-0 lg:py-6"
+      >
+        <NavLink to="/panel" className="flex items-center gap-2.5 px-1 text-lg font-extrabold">
+          <span className="flex size-8 items-center justify-center rounded-full bg-menta/15 ring-2 ring-menta" aria-hidden>🇬🇧</span>
+          Inglés Aptis
+        </NavLink>
+        <nav aria-label="Principal" className="-mx-1 flex gap-1 overflow-x-auto px-1 pb-1 lg:flex-col lg:overflow-visible">
+          {links.map((l) => (
+            <NavLink key={l.to} to={l.to} className={linkClass}>
+              <span aria-hidden>{l.icon}</span>
+              {l.label}
+            </NavLink>
+          ))}
+        </nav>
+        <div className="hidden flex-col gap-3 border-t border-menta/25 pt-4 text-sm lg:mt-auto lg:flex">
+          <span className="truncate">👋 {profile?.nombre ?? session.user.email}</span>
+          <span className="text-xs text-white/70">✅ Nivel {profile?.nivel_actual ?? 'A1'}</span>
+          <button
+            className="w-fit rounded-xl border border-menta/35 bg-white/5 px-4 py-2 font-semibold hover:bg-menta/20 hover:text-menta"
+            onClick={async () => {
+              await signOut()
+              navigate('/')
+            }}
+          >
+            Salir
+          </button>
+        </div>
+      </aside>
+      <main id="main" className="circuitos min-w-0 flex-1 px-4 py-8 sm:px-8 lg:py-10">
+        <div className="mx-auto max-w-5xl">
+          <Outlet />
+        </div>
+        <div className="mt-10 flex justify-center lg:hidden">
+          <button
+            className="btn btn-ghost text-sm"
+            onClick={async () => {
+              await signOut()
+              navigate('/')
+            }}
+          >
+            Salir
+          </button>
+        </div>
+      </main>
     </div>
   )
 }

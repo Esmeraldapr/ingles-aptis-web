@@ -54,7 +54,7 @@ export default function ProfilePage() {
 
   return (
     <div>
-      <PageTitle>Mi perfil</PageTitle>
+      <PageTitle sub="Edita tus datos, cambia la contraseña y mira tu historial.">👤 Mi perfil</PageTitle>
       <div className="grid gap-8 lg:grid-cols-2">
         <form onSubmit={saveProfile} className="sheet space-y-4 p-6">
           <h2 className="text-xl font-bold">Datos</h2>

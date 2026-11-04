@@ -1,69 +1,71 @@
 @import "tailwindcss";
 
-/* Paleta "hoja de examen" */
+/* Estilo neón azul marino + menta, el mismo de tus webs de TAI */
 @theme {
-  --color-paper: #fbfcfe;
-  --color-rule: #dce6f5;
-  --color-ink: #1b2a4a;
-  --color-slate: #56657d;
-  --color-highlight: #ffe066;
-  --color-mark: #c8233a;
-  --color-ok: #1f7a4d;
+  --color-paper: #eef6fa;
+  --color-rule: #d9e8f0;
+  --color-ink: #00203f;
+  --color-ink-2: #0b3a6b;
+  --color-slate: #5b6b80;
+  --color-menta: #36ecde;
+  --color-turquesa: #14b8a6;
+  --color-turquesa-osc: #0f766e;
+  --color-highlight: #36ecde;
+  --color-mark: #e11d48;
+  --color-ok: #16a34a;
 
-  /* una tinta por destreza */
-  --color-grammar: #3454d1;
-  --color-reading: #0f7c80;
-  --color-listening: #8a3ffc;
-  --color-writing: #c2410c;
-  --color-speaking: #b4235a;
+  /* una tinta neón por destreza */
+  --color-grammar: #3b82f6;
+  --color-reading: #14b8a6;
+  --color-listening: #a855f7;
+  --color-writing: #f97316;
+  --color-speaking: #ec4899;
 
-  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Atkinson Hyperlegible", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  --font-body: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
 }
 
 html {
-  color: var(--color-ink);
-  background-color: var(--color-paper);
+  color: #1e1b2e;
   font-family: var(--font-body);
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.55;
 }
 
-/* pautado de libreta muy sutil */
 body {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent 31px,
-    color-mix(in srgb, var(--color-rule) 55%, transparent) 31px,
-    color-mix(in srgb, var(--color-rule) 55%, transparent) 32px
-  );
   min-height: 100vh;
+  background:
+    radial-gradient(circle at 10% 0%, #d7f7f3 0%, transparent 45%),
+    radial-gradient(circle at 90% 10%, #dbeafe 0%, transparent 40%),
+    var(--color-paper);
 }
 
 h1, h2, h3 {
   font-family: var(--font-display);
-  letter-spacing: -0.015em;
-  line-height: 1.12;
+  font-weight: 800;
+  color: var(--color-ink);
+  line-height: 1.15;
 }
 
-/* trazo de rotulador fluorescente */
+/* circuitos laterales en el fondo del contenido */
+.circuitos {
+  background-image: url('/circuito-lateral.svg'), url('/circuito-lateral.svg');
+  background-repeat: no-repeat, no-repeat;
+  background-position: left top, right top;
+  background-size: 180px auto, 180px auto;
+  background-attachment: fixed, fixed;
+}
+.circuitos-dcha { transform: scaleX(-1); }
+@media (max-width: 1100px) { .circuitos { background-image: none; } }
+
+/* marca de respuesta correcta */
 .highlight {
-  background-image: linear-gradient(
-    100deg,
-    transparent 0.2em,
-    var(--color-highlight) 0.25em,
-    var(--color-highlight) calc(100% - 0.3em),
-    transparent calc(100% - 0.15em)
-  );
-  background-size: 100% 0.62em;
-  background-position: 0 88%;
-  background-repeat: no-repeat;
+  background: linear-gradient(transparent 55%, color-mix(in srgb, var(--color-menta) 70%, transparent) 55%);
   padding: 0 0.1em;
 }
 
 :focus-visible {
-  outline: 3px solid var(--color-grammar);
+  outline: 3px solid var(--color-menta);
   outline-offset: 2px;
   border-radius: 6px;
 }
@@ -82,36 +84,123 @@ h1, h2, h3 {
 .bubble-fill { animation: bubble-fill 180ms ease-out; }
 
 @layer components {
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  border-radius: 999px;
-  padding: 0.55rem 1.15rem;
-  font-weight: 700;
-  transition: background-color 120ms, color 120ms;
-}
-.btn-primary { background: var(--color-ink); color: var(--color-paper); }
-.btn-primary:hover { background: #2b3f68; }
-.btn-ghost { border: 2px solid var(--color-ink); color: var(--color-ink); }
-.btn-ghost:hover { background: var(--color-ink); color: var(--color-paper); }
-.btn-danger { border: 2px solid var(--color-mark); color: var(--color-mark); }
-.btn-danger:hover { background: var(--color-mark); color: white; }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn {
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 12px;
+    padding: 0.6rem 1.2rem;
+    font-weight: 700;
+    transition: box-shadow 150ms, color 150ms, background-color 150ms;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #00203f 0%, #0b3a6b 100%);
+    color: #fff;
+    border: 1.5px solid var(--color-menta);
+    box-shadow: 0 0 10px rgba(54, 236, 222, 0.28), inset 0 0 10px rgba(54, 236, 222, 0.12);
+  }
+  .btn-primary:hover {
+    color: var(--color-menta);
+    box-shadow: 0 0 18px rgba(54, 236, 222, 0.55), inset 0 0 12px rgba(54, 236, 222, 0.2);
+  }
+  .btn-ghost { background: #fff; color: var(--color-ink); border: 2px solid var(--color-turquesa); }
+  .btn-ghost:hover { background: #e8fdfb; box-shadow: 0 0 12px rgba(20, 184, 166, 0.35); }
+  .btn-danger { background: #fff; border: 2px solid var(--color-mark); color: var(--color-mark); }
+  .btn-danger:hover { background: var(--color-mark); color: #fff; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-.field {
-  width: 100%;
-  border: 2px solid var(--color-rule);
-  background: white;
-  border-radius: 10px;
-  padding: 0.55rem 0.8rem;
-}
-.field:focus { border-color: var(--color-grammar); outline: none; }
+  .field {
+    width: 100%;
+    border: 1.5px solid var(--color-rule);
+    background: #f4f8ff;
+    border-radius: 12px;
+    padding: 0.65rem 0.9rem;
+  }
+  .field:focus { border-color: var(--color-turquesa); outline: none; box-shadow: 0 0 0 3px rgba(54, 236, 222, 0.25); }
 
-.sheet {
-  background: white;
-  border: 1.5px solid var(--color-rule);
-  border-radius: 14px;
-}
+  .sheet {
+    background: #fff;
+    border: 1px solid var(--color-rule);
+    border-radius: 16px;
+    box-shadow: 0 10px 24px -14px rgba(0, 32, 63, 0.35);
+  }
+
+  /* tarjeta con cabecera oscura neón, como "Test por temas" */
+  .neon-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--color-rule);
+    box-shadow: 0 10px 24px -14px rgba(0, 32, 63, 0.35);
+    transition: transform 150ms, box-shadow 150ms;
+  }
+  .neon-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 2px var(--color-menta), 0 14px 30px -10px rgba(54, 236, 222, 0.55);
+  }
+  .neon-head {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(circle at 80% 20%, rgba(54, 236, 222, 0.18) 0%, transparent 50%),
+      linear-gradient(135deg, #00203f 0%, #05305e 100%);
+    border-bottom: 3px solid var(--accent, var(--color-menta));
+    color: #fff;
+  }
+  .neon-head::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(54, 236, 222, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(54, 236, 222, 0.08) 1px, transparent 1px);
+    background-size: 18px 18px;
+    pointer-events: none;
+  }
+
+  /* recuadro de estadística, como los del dashboard de TAI */
+  .stat-tile {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    padding: 1rem 1.1rem;
+    color: #fff;
+    border-left: 4px solid var(--accent, var(--color-menta));
+    box-shadow: 0 10px 24px -12px rgba(0, 32, 63, 0.5);
+  }
+
+  /* pestañas tipo "BLOQUE 1" */
+  .pill-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.15;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: #fff;
+    color: #334155;
+    border: 1.5px solid var(--color-rule);
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: 150ms;
+  }
+  .pill-tab small { font-weight: 600; font-size: 0.68rem; letter-spacing: 0; text-transform: none; opacity: 0.75; }
+  .pill-tab:hover { border-color: var(--color-turquesa); color: var(--color-turquesa-osc); }
+  .pill-tab[aria-pressed="true"] {
+    background: linear-gradient(135deg, #00203f 0%, #0b3a6b 100%);
+    color: var(--color-menta);
+    border-color: var(--color-menta);
+    box-shadow: 0 0 12px rgba(54, 236, 222, 0.45);
+  }
+  .pill-tab[aria-pressed="true"] small { color: #b8f5ef; opacity: 1; }
 }

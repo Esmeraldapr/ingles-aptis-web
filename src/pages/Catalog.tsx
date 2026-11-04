@@ -22,7 +22,7 @@ export default function Catalog() {
 
   return (
     <div>
-      <PageTitle>Cursos</PageTitle>
+      <PageTitle sub="Elige un curso y practica por unidades o por destreza.">📚 Cursos</PageTitle>
 
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end">
         <label className="block flex-1">
@@ -38,7 +38,7 @@ export default function Catalog() {
                 type="button"
                 aria-pressed={level === l}
                 onClick={() => setLevel(l)}
-                className={`rounded-full border-2 px-3 py-1 text-sm font-bold ${level === l ? 'border-ink bg-ink text-paper' : 'border-rule bg-white hover:border-ink'}`}
+                className="pill-tab"
               >
                 {l === 'all' ? 'Todos' : l}
               </button>
@@ -56,12 +56,17 @@ export default function Catalog() {
 
       <ul className="grid gap-5 md:grid-cols-2">
         {filtered.map((c) => (
-          <li key={c.id} className="sheet flex flex-col p-6">
-            <span className="w-fit rounded-md bg-ink px-2 py-0.5 text-sm font-bold text-paper">{c.level}</span>
-            <h2 className="mt-3 text-2xl font-bold">{c.title}</h2>
-            <p className="mt-2 flex-1 text-slate">{c.description}</p>
-            <Link to={session ? `/cursos/${c.id}` : '/entrar'} className="btn btn-ghost mt-5 w-fit text-sm">
-              Ver curso
+          <li key={c.id}>
+            <Link to={session ? `/cursos/${c.id}` : '/entrar'} className="neon-card h-full">
+              <div className="neon-head h-32 flex-col gap-1">
+                <span className="relative text-5xl drop-shadow-[0_0_12px_rgba(54,236,222,.7)]" aria-hidden>🇬🇧</span>
+                <span className="relative rounded-md border border-menta px-2 text-sm font-bold text-menta">{c.level}</span>
+              </div>
+              <div className="flex flex-1 flex-col p-5">
+                <h2 className="text-xl">{c.title}</h2>
+                <p className="mt-1 flex-1 text-sm text-slate">{c.description}</p>
+                <span className="btn btn-primary mt-4 w-full">Entrar al curso</span>
+              </div>
             </Link>
           </li>
         ))}
