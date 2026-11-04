@@ -71,3 +71,17 @@ export function splitEmail(question: string): { question: string; email: string 
 export function wordCount(text: string): number {
   return text.trim() ? text.trim().split(/\s+/).length : 0
 }
+
+/** Enlaces al campus antiguo: no se muestran nunca, todo el material vive dentro de la web. */
+export function isExternalCampus(url: string | null | undefined): boolean {
+  return !!url && /nubily-educa\.com/i.test(url)
+}
+
+/** ¿La lección tiene material propio que enseñar (sin contar enlaces al campus)? */
+export function hasOwnContent(content: string | null, videoUrl: string | null): boolean {
+  if (videoUrl && !isExternalCampus(videoUrl)) return true
+  if (!content) return false
+  return content
+    .split('\n')
+    .some((line) => line.trim() && !line.startsWith('#') && !isExternalCampus(line) && !line.startsWith('Original en el campus'))
+}

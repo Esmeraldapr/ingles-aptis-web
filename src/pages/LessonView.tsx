@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
-import { useExercises, useLesson, useLessons, useMyLessonSubmissions, useMyProgress, useSubmitAnswer } from '../hooks/queries'
+import { useExercises, useLesson, useMyLessonSubmissions, useMyProgress, useSubmitAnswer } from '../hooks/queries'
 import { AnswerBubbles } from '../components/AnswerBubbles'
 import { Markdown } from '../components/Markdown'
 import { ErrorBox, FormError, PageTitle, SkillTag, Spinner } from '../components/ui'
-import { skillOf, splitEmail, splitPassage, splitTitle, wordCount } from '../lib/lessons'
-import type { Exercise, Lesson, WritingOptions } from '../types'
+import { hasOwnContent, isExternalCampus, skillOf, splitEmail, splitPassage, splitTitle, wordCount } from '../lib/lessons'
+import type { Exercise, WritingOptions } from '../types'
 
 type Answer = { value: string; isCorrect: boolean | null; correct: string | null }
 
@@ -69,23 +69,10 @@ function WritingTask({ ex, answer, onSubmit, busy }: {
   )
 }
 
-function ListeningNote({ lesson, all }: { lesson: Lesson; all: Lesson[] }) {
-  const { unit } = splitTitle(lesson.title)
-  const theory = all.find((l) => l.title === `${unit} — Teoría`)
-  return (
-    <p className="mb-6 rounded-xl border-l-4 border-listening bg-listening/5 p-4 text-sm">
-      Pon el audio antes de responder. Lo tienes en{' '}
-      {theory ? <Link to={`/lecciones/${theory.id}`} className="font-bold underline">la teoría de {unit}</Link> : 'la teoría de la unidad'}
-      {' '}(se abre en el campus con tu sesión iniciada).
-    </p>
-  )
-}
-
 export default function LessonView() {
   const { lessonId } = useParams()
   const { profile } = useAuth()
   const lesson = useLesson(lessonId)
-  const courseLessons = useLessons(lesson.data?.course_id)
   const exercises = useExercises(lessonId)
   const subs = useMyLessonSubmissions(profile?.id, lessonId)
   const progress = useMyProgress(profile?.id)
@@ -150,18 +137,18 @@ export default function LessonView() {
       <PageTitle back={{ to: `/cursos/${l.course_id}`, label: unit }}>{part}</PageTitle>
       <div className="-mt-5 mb-8"><SkillTag skill={skill} /></div>
 
-      {l.content && !l.content.startsWith('Original en el campus') && (
-        <section className="sheet mb-8 p-6"><Markdown source={l.content} skipFirstHeading /></section>
+      {hasOwnContent(l.content, null) && (
+        <section className="sheet mb-8 p-6"><Markdown source={l.content!} skipFirstHeading /></section>
       )}
-      {l.video_url && list.length === 0 && (
-        <a href={l.video_url} target="_blank" rel="noreferrer" className="btn btn-primary mb-8">
-          Abrir el vídeo en el campus
-        </a>
+      {l.video_url && !isExternalCampus(l.video_url) && (
+        <video controls preload="metadata" src={l.video_url} className="mb-8 w-full rounded-xl bg-black" />
+      )}
+      {list.length === 0 && !hasOwnContent(l.content, l.video_url) && (
+        <p className="sheet p-6 text-slate">Esta lección todavía no tiene material.</p>
       )}
 
       {list.length > 0 && (
         <>
-          {skill === 'listening' && <ListeningNote lesson={l} all={courseLessons.data ?? []} />}
 
           <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2 text-sm text-slate">
             <span>{answered} de {list.length} respondidas</span>

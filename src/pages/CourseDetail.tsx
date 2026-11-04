@@ -3,7 +3,7 @@ import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useCourse, useEnroll, useExerciseCounts, useLessons, useMyEnrollments, useMyProgress } from '../hooks/queries'
 import { ErrorBox, FormError, PageTitle, SKILL_ACCENT, SKILL_ICON, Spinner } from '../components/ui'
-import { SKILL_LABEL, groupByUnit, skillOf, splitTitle } from '../lib/lessons'
+import { SKILL_LABEL, groupByUnit, hasOwnContent, skillOf, splitTitle } from '../lib/lessons'
 import type { Skill } from '../types'
 
 const SKILLS: Skill[] = ['grammar', 'reading', 'listening', 'writing', 'speaking', 'teoria']
@@ -42,10 +42,13 @@ export default function CourseDetail() {
 
   const c = course.data!
   const prog = new Map((progress.data ?? []).map((p) => [p.lesson_id, p]))
-  const groups = groupByUnit(lessons.data ?? [])
+  // solo lecciones con ejercicios o con material propio (nada de enlaces al campus)
+  const visible = (lessons.data ?? []).filter((l) => (counts.data?.[l.id] ?? 0) > 0 || hasOwnContent(l.content, l.video_url))
+  const groups = groupByUnit(visible)
+  const skillsAvailable = SKILLS.filter((sk) => visible.some((l) => skillOf(l.title) === sk))
   const skill = params.get('destreza') as Skill | null
   const unitParam = params.get('unidad')
-  const current = skill ? null : unitParam ?? groups[1]?.unit ?? groups[0]?.unit
+  const current = skill ? null : unitParam ?? groups[0]?.unit
 
   const set = (k: 'unidad' | 'destreza', v: string | null) => {
     const next = new URLSearchParams()
@@ -54,7 +57,7 @@ export default function CourseDetail() {
   }
 
   const shown = skill
-    ? (lessons.data ?? []).filter((l) => skillOf(l.title) === skill)
+    ? visible.filter((l) => skillOf(l.title) === skill)
     : groups.find((g) => g.unit === current)?.lessons ?? []
 
   return (
@@ -67,7 +70,7 @@ export default function CourseDetail() {
 
       <div className="mb-3 flex flex-wrap items-center gap-2" role="group" aria-label="Filtrar por destreza">
         <span className="mr-1 text-sm font-semibold text-slate">Destreza:</span>
-        {SKILLS.map((sk) => (
+        {skillsAvailable.map((sk) => (
           <button key={sk} className="pill-tab" aria-pressed={skill === sk} onClick={() => set('destreza', skill === sk ? null : sk)}>
             {SKILL_ICON[sk]} {SKILL_LABEL[sk]}
           </button>
@@ -109,7 +112,7 @@ export default function CourseDetail() {
                 <div className="flex flex-1 flex-col p-4">
                   <h3 className="text-base">{part}</h3>
                   <p className="text-sm text-slate">
-                    {n > 0 ? `${n} preguntas` : l.video_url ? 'Vídeo y recursos' : 'Recursos'}
+                    {n > 0 ? `${n} preguntas` : 'Material de estudio'}
                     {p && n > 0 && ` · nota ${Math.round(p.score ?? 0)}%`}
                   </p>
                   <span className="btn btn-primary mt-4 w-full">{n > 0 ? 'Practicar' : 'Ver'}</span>

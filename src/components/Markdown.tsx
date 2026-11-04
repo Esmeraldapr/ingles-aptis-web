@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { isExternalCampus } from '../lib/lessons'
 
 /** Renderizador mínimo para el contenido de las lecciones: títulos, listas y enlaces. */
 function inline(text: string): ReactNode[] {
@@ -37,6 +38,27 @@ export function Markdown({ source, skipFirstHeading = false }: { source: string;
   }
   for (const raw of source.split('\n')) {
     const line = raw.trimEnd()
+    if (isExternalCampus(line)) continue
+    // Material incrustado: [[pdf:URL|Título]] y [[audio:URL|Título]]
+    const media = line.match(/^\[\[(pdf|audio):(\S+?)(?:\|(.+))?\]\]$/)
+    if (media) {
+      flush()
+      const [, kind, url, label] = media
+      blocks.push(
+        kind === 'audio' ? (
+          <figure key={blocks.length} className="my-4">
+            {label && <figcaption className="mb-2 font-bold">🎧 {label}</figcaption>}
+            <audio controls preload="none" src={url} className="w-full">Tu navegador no puede reproducir audio.</audio>
+          </figure>
+        ) : (
+          <figure key={blocks.length} className="my-5">
+            {label && <figcaption className="mb-2 font-bold">📄 {label}</figcaption>}
+            <iframe title={label ?? 'Documento'} src={url} className="h-[75vh] w-full rounded-xl border border-rule bg-white" />
+          </figure>
+        ),
+      )
+      continue
+    }
     if (line.startsWith('- ')) { list.push(line.slice(2)); continue }
     flush()
     if (line.startsWith('## ')) {
@@ -49,5 +71,5 @@ export function Markdown({ source, skipFirstHeading = false }: { source: string;
     }
   }
   flush()
-  return <div className="max-w-[70ch]">{blocks}</div>
+  return <div>{blocks}</div>
 }
