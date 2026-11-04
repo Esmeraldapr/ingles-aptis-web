@@ -41,7 +41,7 @@ export function Markdown({ source, skipFirstHeading = false }: { source: string;
     const line = raw.trimEnd()
     if (isExternalCampus(line)) continue
     // Material incrustado: [[pdf:URL|Título]] y [[audio:URL|Título]]
-    const media = line.match(/^\[\[(pdf|audio):(\S+?)(?:\|(.+))?\]\]$/)
+    const media = line.match(/^\[\[(pdf|audio):([^|\]]+?)(?:\|(.+))?\]\]$/)
     if (media) {
       flush()
       const [, kind, url, label] = media
