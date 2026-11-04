@@ -59,7 +59,7 @@ export default function CourseDetail() {
 
   return (
     <div>
-      <PageTitle back={{ to: '/panel', label: 'Dashboard' }} sub={c.description}>
+      <PageTitle sub={c.description}>
         📚 {c.title}
       </PageTitle>
 

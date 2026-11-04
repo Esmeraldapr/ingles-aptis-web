@@ -61,7 +61,7 @@ function GoogleButton() {
         onClick={async () => {
           const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
-            options: { redirectTo: `${window.location.origin}/panel` },
+            options: { redirectTo: `${window.location.origin}/cursos` },
           })
           if (error) setError(error)
         }}
@@ -77,7 +77,7 @@ export function Login() {
   const { session } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
-  const from = (location.state as { from?: string } | null)?.from ?? '/panel'
+  const from = (location.state as { from?: string } | null)?.from ?? '/cursos'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [busy, setBusy] = useState(false)
@@ -124,7 +124,7 @@ export function Register() {
   const [error, setError] = useState<unknown>(null)
   const [sent, setSent] = useState(false)
 
-  if (session) return <Navigate to="/panel" replace />
+  if (session) return <Navigate to="/cursos" replace />
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
@@ -134,7 +134,7 @@ export function Register() {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { nombre }, emailRedirectTo: `${window.location.origin}/panel` },
+      options: { data: { nombre }, emailRedirectTo: `${window.location.origin}/cursos` },
     })
     setBusy(false)
     if (error) return setError(error)
@@ -217,7 +217,7 @@ export function ResetPassword() {
     const { error } = await supabase.auth.updateUser({ password })
     setBusy(false)
     if (error) setError(error)
-    else navigate('/panel', { replace: true })
+    else navigate('/cursos', { replace: true })
   }
 
   return (
