@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+/* Paleta "hoja de examen" */
+@theme {
+  --color-paper: #fbfcfe;
+  --color-rule: #dce6f5;
+  --color-ink: #1b2a4a;
+  --color-slate: #56657d;
+  --color-highlight: #ffe066;
+  --color-mark: #c8233a;
+  --color-ok: #1f7a4d;
+
+  /* una tinta por destreza */
+  --color-grammar: #3454d1;
+  --color-reading: #0f7c80;
+  --color-listening: #8a3ffc;
+  --color-writing: #c2410c;
+  --color-speaking: #b4235a;
+
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  color: var(--color-ink);
+  background-color: var(--color-paper);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+/* pautado de libreta muy sutil */
+body {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 31px,
+    color-mix(in srgb, var(--color-rule) 55%, transparent) 31px,
+    color-mix(in srgb, var(--color-rule) 55%, transparent) 32px
+  );
+  min-height: 100vh;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+  line-height: 1.12;
+}
+
+/* trazo de rotulador fluorescente */
+.highlight {
+  background-image: linear-gradient(
+    100deg,
+    transparent 0.2em,
+    var(--color-highlight) 0.25em,
+    var(--color-highlight) calc(100% - 0.3em),
+    transparent calc(100% - 0.15em)
+  );
+  background-size: 100% 0.62em;
+  background-position: 0 88%;
+  background-repeat: no-repeat;
+  padding: 0 0.1em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-grammar);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes bubble-fill {
+  from { transform: scale(0.2); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.bubble-fill { animation: bubble-fill 180ms ease-out; }
+
+@layer components {
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.55rem 1.15rem;
+  font-weight: 700;
+  transition: background-color 120ms, color 120ms;
+}
+.btn-primary { background: var(--color-ink); color: var(--color-paper); }
+.btn-primary:hover { background: #2b3f68; }
+.btn-ghost { border: 2px solid var(--color-ink); color: var(--color-ink); }
+.btn-ghost:hover { background: var(--color-ink); color: var(--color-paper); }
+.btn-danger { border: 2px solid var(--color-mark); color: var(--color-mark); }
+.btn-danger:hover { background: var(--color-mark); color: white; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.field {
+  width: 100%;
+  border: 2px solid var(--color-rule);
+  background: white;
+  border-radius: 10px;
+  padding: 0.55rem 0.8rem;
+}
+.field:focus { border-color: var(--color-grammar); outline: none; }
+
+.sheet {
+  background: white;
+  border: 1.5px solid var(--color-rule);
+  border-radius: 14px;
+}
+}
