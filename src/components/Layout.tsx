@@ -1,9 +1,10 @@
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
+import { UKFlag } from './UKFlag'
 
 const NAV = [
   { to: '/panel', label: 'Dashboard', icon: '🏠' },
-  { to: '/cursos', label: 'Cursos', icon: '📚' },
+  { to: '/cursos', label: 'Curso APTIS', icon: '📚' },
   { to: '/progreso', label: 'Mi progreso', icon: '📊' },
   { to: '/perfil', label: 'Mi perfil', icon: '👤' },
 ]
@@ -42,7 +43,7 @@ export function Layout() {
         className="sticky top-0 z-30 flex flex-col gap-4 border-b-2 border-menta bg-[radial-gradient(circle_at_0%_0%,rgba(54,236,222,.16)_0%,transparent_40%),linear-gradient(180deg,#00203f_0%,#05305e_100%)] px-4 py-4 text-white shadow-[4px_0_18px_-8px_rgba(54,236,222,.45)] lg:h-screen lg:w-64 lg:shrink-0 lg:border-r-2 lg:border-b-0 lg:py-6"
       >
         <NavLink to="/panel" className="flex items-center gap-2.5 px-1 text-lg font-extrabold">
-          <span className="flex size-8 items-center justify-center rounded-full bg-menta/15 ring-2 ring-menta" aria-hidden>🇬🇧</span>
+          <span className="flex size-9 items-center justify-center overflow-hidden rounded-full bg-[#012169] ring-2 ring-menta"><UKFlag className="h-9 w-14" /></span>
           Inglés Aptis
         </NavLink>
         <nav aria-label="Principal" className="-mx-1 flex gap-1 overflow-x-auto px-1 pb-1 lg:flex-col lg:overflow-visible">

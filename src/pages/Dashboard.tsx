@@ -131,7 +131,7 @@ export default function Dashboard() {
             )
           }
         >
-          Todavía no estás matriculada en ningún curso. Entra en el curso y pulsa «Matricularme».
+          Entra en el curso para empezar: tu progreso se guardará automáticamente.
         </Empty>
       )}
       {enrollments.data?.map((e) => <CourseHome key={e.id} course={e.courses} progress={map} />)}

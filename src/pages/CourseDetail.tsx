@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useCourse, useEnroll, useExerciseCounts, useLessons, useMyEnrollments, useMyProgress } from '../hooks/queries'
@@ -24,12 +25,22 @@ export default function CourseDetail() {
   const progress = useMyProgress(profile?.id)
   const enroll = useEnroll(profile?.id)
 
+  // Matrícula automática: al entrar en el curso queda matriculada, sin botón
+  const enrolledHere = enrollments.data?.some((e) => e.course_id === courseId)
+  const tried = useRef<string | null>(null)
+  const { mutate: enrollMutate } = enroll
+  useEffect(() => {
+    if (profile?.id && courseId && enrollments.data && !enrolledHere && tried.current !== courseId) {
+      tried.current = courseId
+      enrollMutate(courseId)
+    }
+  }, [profile?.id, courseId, enrollments.data, enrolledHere, enrollMutate])
+
   if (course.isLoading || lessons.isLoading) return <Spinner />
   if (course.error) return <ErrorBox error={course.error} retry={() => course.refetch()} />
   if (lessons.error) return <ErrorBox error={lessons.error} retry={() => lessons.refetch()} />
 
   const c = course.data!
-  const enrolled = enrollments.data?.some((e) => e.course_id === c.id)
   const prog = new Map((progress.data ?? []).map((p) => [p.lesson_id, p]))
   const groups = groupByUnit(lessons.data ?? [])
   const skill = params.get('destreza') as Skill | null
@@ -49,18 +60,10 @@ export default function CourseDetail() {
   return (
     <div>
       <PageTitle back={{ to: '/panel', label: 'Dashboard' }} sub={c.description}>
-        ✅ {c.title}
+        📚 {c.title}
       </PageTitle>
 
-      {!enrolled && (
-        <div className="sheet mb-8 flex flex-wrap items-center justify-between gap-4 p-5">
-          <p>Matricúlate para que se guarden tu progreso y tus notas.</p>
-          <button className="btn btn-primary" disabled={enroll.isPending} onClick={() => enroll.mutate(c.id)}>
-            {enroll.isPending ? 'Matriculando…' : 'Matricularme'}
-          </button>
-          <FormError error={enroll.error} />
-        </div>
-      )}
+      <FormError error={enroll.error} />
 
       <div className="mb-3 flex flex-wrap items-center gap-2" role="group" aria-label="Filtrar por destreza">
         <span className="mr-1 text-sm font-semibold text-slate">Destreza:</span>

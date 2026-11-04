@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { useCourses } from '../hooks/queries'
 import { useAuth } from '../hooks/useAuth'
 import { Empty, ErrorBox, PageTitle, Spinner } from '../components/ui'
+import { UKFlag } from '../components/UKFlag'
 import { LEVELS, type Level } from '../types'
 
 export default function Catalog() {
@@ -19,6 +20,8 @@ export default function Catalog() {
         (!term || c.title.toLowerCase().includes(term) || (c.description ?? '').toLowerCase().includes(term)),
     )
   }, [courses.data, level, q])
+
+  if (session && courses.data?.length === 1) return <Navigate to={`/cursos/${courses.data[0].id}`} replace />
 
   return (
     <div>
@@ -59,7 +62,7 @@ export default function Catalog() {
           <li key={c.id}>
             <Link to={session ? `/cursos/${c.id}` : '/entrar'} className="neon-card h-full">
               <div className="neon-head h-32 flex-col gap-1">
-                <span className="relative text-5xl drop-shadow-[0_0_12px_rgba(54,236,222,.7)]" aria-hidden>🇬🇧</span>
+                <span className="relative overflow-hidden rounded-md ring-2 ring-menta"><UKFlag className="h-10 w-16" /></span>
                 <span className="relative rounded-md border border-menta px-2 text-sm font-bold text-menta">{c.level}</span>
               </div>
               <div className="flex flex-1 flex-col p-5">

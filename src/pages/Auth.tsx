@@ -3,6 +3,7 @@ import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { FormError } from '../components/ui'
+import { UKFlag } from '../components/UKFlag'
 
 function AuthCard({ title, children, footer }: { title: string; children: ReactNode; footer?: ReactNode }) {
   const { pathname } = useLocation()
@@ -21,7 +22,7 @@ function AuthCard({ title, children, footer }: { title: string; children: ReactN
 
       <div className="relative w-full max-w-md rounded-3xl bg-[linear-gradient(160deg,#fbfaff_0%,#f2eefc_55%,#ecebfb_100%)] p-7 shadow-[0_30px_60px_-20px_rgba(0,0,0,.6)] sm:p-9">
         <div className="mb-6 flex flex-col items-center text-center">
-          <span className="flex size-20 items-center justify-center rounded-full bg-[linear-gradient(135deg,#00203f,#0b3a6b)] text-4xl ring-4 ring-menta/60" aria-hidden>🇬🇧</span>
+          <span className="flex size-20 items-center justify-center overflow-hidden rounded-full bg-[#012169] ring-4 ring-menta/60"><UKFlag className="h-20 w-32" /></span>
           <p className="mt-3 text-xl font-extrabold text-[#1e1b2e]">Inglés Aptis</p>
           <p className="text-slate">Practica el examen Aptis</p>
         </div>
