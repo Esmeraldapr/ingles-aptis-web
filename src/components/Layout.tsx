@@ -3,10 +3,9 @@ import { useAuth } from '../hooks/useAuth'
 import { UKFlag } from './UKFlag'
 
 const NAV = [
-  { to: '/cursos', label: 'Curso APTIS', icon: '📚' },
+  { to: '/cursos', label: 'Curso', icon: '📚' },
   { to: '/panel', label: 'Mi resumen', icon: '🏠' },
   { to: '/progreso', label: 'Mi progreso', icon: '📊' },
-  { to: '/perfil', label: 'Mi perfil', icon: '👤' },
 ]
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
@@ -20,7 +19,7 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
 const PUBLIC = ['/', '/entrar', '/registro', '/recuperar', '/nueva-contrasena']
 
 export function Layout() {
-  const { session, profile, isStaff, signOut } = useAuth()
+  const { session, profile, signOut } = useAuth()
   const navigate = useNavigate()
   const { pathname } = useLocation()
 
@@ -32,7 +31,7 @@ export function Layout() {
     )
   }
 
-  const links = isStaff ? [...NAV, { to: '/admin', label: 'Administración', icon: '🛠️' }] : NAV
+  const links = NAV
 
   return (
     <div className="min-h-screen lg:flex">
@@ -68,7 +67,7 @@ export function Layout() {
           </button>
         </div>
       </aside>
-      <main id="main" className="circuitos min-w-0 flex-1 px-4 py-8 sm:px-8 lg:py-10">
+      <main id="main" className="min-w-0 flex-1 px-4 py-8 sm:px-8 lg:py-10">
         <div className="mx-auto max-w-5xl">
           <Outlet />
         </div>

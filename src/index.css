@@ -47,17 +47,6 @@ h1, h2, h3 {
   line-height: 1.15;
 }
 
-/* circuitos laterales en el fondo del contenido */
-.circuitos {
-  background-image: url('/circuito-lateral.svg'), url('/circuito-lateral.svg');
-  background-repeat: no-repeat, no-repeat;
-  background-position: left top, right top;
-  background-size: 180px auto, 180px auto;
-  background-attachment: fixed, fixed;
-}
-.circuitos-dcha { transform: scaleX(-1); }
-@media (max-width: 1100px) { .circuitos { background-image: none; } }
-
 /* marca de respuesta correcta */
 .highlight {
   background: linear-gradient(transparent 55%, color-mix(in srgb, var(--color-menta) 70%, transparent) 55%);

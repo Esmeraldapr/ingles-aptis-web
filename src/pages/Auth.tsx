@@ -11,8 +11,6 @@ function AuthCard({ title, children, footer }: { title: string; children: ReactN
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_20%_20%,rgba(168,85,247,.35)_0%,transparent_45%),radial-gradient(circle_at_85%_80%,rgba(54,236,222,.28)_0%,transparent_45%),linear-gradient(160deg,#140e30_0%,#00203f_55%,#05305e_100%)] px-4 py-12">
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(54,236,222,.07)_1px,transparent_1px),linear-gradient(90deg,rgba(54,236,222,.07)_1px,transparent_1px)] bg-[size:32px_32px]" />
-      <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 hidden w-72 bg-[url('/circuito-lateral.svg')] bg-no-repeat opacity-70 md:block" />
-      <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 hidden w-72 -scale-x-100 bg-[url('/circuito-lateral.svg')] bg-no-repeat opacity-70 md:block" />
       <div aria-hidden className="pointer-events-none absolute left-[8%] top-[12%] hidden rounded-2xl border border-menta/40 bg-ink/60 px-5 py-4 font-mono text-sm leading-relaxed text-menta/90 shadow-[0_0_24px_rgba(54,236,222,.25)] lg:block">
         while (practising) {'{'}<br />&nbsp;&nbsp;improve();<br />{'}'}
       </div>
