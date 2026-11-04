@@ -46,7 +46,14 @@ export function PdfMedia({ src, label }: { src: string; label?: string }) {
       {open && (
         <div className="border-t border-rule">
           {error ? <p className="p-4 text-sm text-mark">{error}</p> : url ? (
-            <iframe title={label ?? 'Documento'} src={url} className="h-[80vh] w-full bg-white" />
+            <>
+              <div className="flex justify-end border-b border-rule bg-paper px-4 py-2">
+                <a href={url} target="_blank" rel="noreferrer" className="text-sm font-bold text-turquesa-osc underline-offset-4 hover:underline">
+                  Abrir a pantalla completa
+                </a>
+              </div>
+              <iframe title={label ?? 'Documento'} src={url} className="h-[80vh] w-full bg-white" />
+            </>
           ) : <p className="p-4 text-sm text-slate">Cargando documento…</p>}
         </div>
       )}
