@@ -32,7 +32,7 @@ function CertificateButton({ courseId }: { courseId: string }) {
   )
 }
 
-const SKILL_TEXT: Record<Exclude<Skill, 'teoria'>, string> = {
+const SKILL_TEXT: Record<Exclude<Skill, 'teoria' | 'recursos'>, string> = {
   grammar: 'Tiempos verbales, sinónimos, definiciones y collocations.',
   reading: 'Huecos en emails, ordenar frases y emparejar opiniones.',
   listening: 'Preguntas de cada audio del examen.',

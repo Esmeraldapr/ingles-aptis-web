@@ -6,7 +6,7 @@ import { ErrorBox, FormError, PageTitle, SKILL_ACCENT, SKILL_ICON, Spinner } fro
 import { SKILL_LABEL, groupByUnit, hasOwnContent, skillOf, splitTitle } from '../lib/lessons'
 import type { Skill } from '../types'
 
-const SKILLS: Skill[] = ['grammar', 'reading', 'listening', 'writing', 'speaking', 'teoria']
+const SKILLS: Skill[] = ['teoria', 'grammar', 'reading', 'listening', 'writing', 'speaking', 'recursos']
 
 /** "Unit 1: Present Simple" -> { short: "Unit 1", name: "Present Simple" } */
 function unitLabel(unit: string) {

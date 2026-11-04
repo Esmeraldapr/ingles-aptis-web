@@ -43,6 +43,7 @@ const SKILL_CLASS: Record<Skill, string> = {
   writing: 'text-writing border-writing',
   speaking: 'text-speaking border-speaking',
   teoria: 'text-slate border-slate',
+  recursos: 'text-turquesa-osc border-turquesa',
 }
 
 export function SkillTag({ skill }: { skill: Skill }) {
@@ -56,7 +57,7 @@ export function SkillTag({ skill }: { skill: Skill }) {
 export function SkillDot({ skill }: { skill: Skill }) {
   const bg: Record<Skill, string> = {
     grammar: 'bg-grammar', reading: 'bg-reading', listening: 'bg-listening',
-    writing: 'bg-writing', speaking: 'bg-speaking', teoria: 'bg-slate',
+    writing: 'bg-writing', speaking: 'bg-speaking', teoria: 'bg-slate', recursos: 'bg-turquesa',
   }
   return <span className={`inline-block size-2.5 shrink-0 rounded-full ${bg[skill]}`} aria-hidden />
 }
@@ -120,10 +121,10 @@ export function StatTile({ icon, value, label, tone }: { icon: string; value: st
 }
 
 export const SKILL_ACCENT: Record<Skill, string> = {
-  grammar: '#3b82f6', reading: '#14b8a6', listening: '#a855f7', writing: '#f97316', speaking: '#ec4899', teoria: '#36ecde',
+  grammar: '#3b82f6', reading: '#14b8a6', listening: '#a855f7', writing: '#f97316', speaking: '#ec4899', teoria: '#36ecde', recursos: '#14b8a6',
 }
 export const SKILL_ICON: Record<Skill, string> = {
-  grammar: '📝', reading: '📖', listening: '🎧', writing: '✍️', speaking: '🗣️', teoria: '📘',
+  grammar: '📝', reading: '📖', listening: '🎧', writing: '✍️', speaking: '🗣️', teoria: '📘', recursos: '🗂️',
 }
 
 export function ActionCard({ to, icon, title, text, cta, accent = '#36ecde', headHeight = 'h-20' }: {

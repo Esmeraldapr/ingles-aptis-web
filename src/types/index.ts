@@ -2,7 +2,7 @@ export type Role = 'student' | 'teacher' | 'admin'
 export type Level = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2'
 export type ExerciseType = 'multiple_choice' | 'fill_blank' | 'listening' | 'writing'
 export type EnrollmentStatus = 'active' | 'completed' | 'dropped'
-export type Skill = 'grammar' | 'reading' | 'listening' | 'writing' | 'speaking' | 'teoria'
+export type Skill = 'grammar' | 'reading' | 'listening' | 'writing' | 'speaking' | 'teoria' | 'recursos'
 
 export const LEVELS: Level[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
 export const EXERCISE_TYPES: ExerciseType[] = ['multiple_choice', 'fill_blank', 'listening', 'writing']

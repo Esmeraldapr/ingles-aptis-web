@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { isExternalCampus } from '../lib/lessons'
+import { AudioMedia, PdfMedia } from './StorageMedia'
 
 /** Renderizador mínimo para el contenido de las lecciones: títulos, listas y enlaces. */
 function inline(text: string): ReactNode[] {
@@ -45,17 +46,9 @@ export function Markdown({ source, skipFirstHeading = false }: { source: string;
       flush()
       const [, kind, url, label] = media
       blocks.push(
-        kind === 'audio' ? (
-          <figure key={blocks.length} className="my-4">
-            {label && <figcaption className="mb-2 font-bold">🎧 {label}</figcaption>}
-            <audio controls preload="none" src={url} className="w-full">Tu navegador no puede reproducir audio.</audio>
-          </figure>
-        ) : (
-          <figure key={blocks.length} className="my-5">
-            {label && <figcaption className="mb-2 font-bold">📄 {label}</figcaption>}
-            <iframe title={label ?? 'Documento'} src={url} className="h-[75vh] w-full rounded-xl border border-rule bg-white" />
-          </figure>
-        ),
+        kind === 'audio'
+          ? <AudioMedia key={blocks.length} src={url} label={label} />
+          : <PdfMedia key={blocks.length} src={url} label={label} />,
       )
       continue
     }

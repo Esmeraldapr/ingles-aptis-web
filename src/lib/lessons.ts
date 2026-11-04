@@ -28,6 +28,7 @@ export function skillOf(title: string): Skill {
   if (t.includes('LISTENING')) return 'listening'
   if (t.includes('WRITING')) return 'writing'
   if (t.includes('SPEAKING')) return 'speaking'
+  if (t.startsWith('RECURSOS EXTRA')) return 'recursos'
   return 'teoria'
 }
 
@@ -38,6 +39,7 @@ export const SKILL_LABEL: Record<Skill, string> = {
   writing: 'Writing',
   speaking: 'Speaking',
   teoria: 'Teoría',
+  recursos: 'Recursos extra',
 }
 
 /** Agrupa lecciones por unidad manteniendo el orden. */
