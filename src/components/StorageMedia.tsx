@@ -60,3 +60,15 @@ export function PdfMedia({ src, label }: { src: string; label?: string }) {
     </details>
   )
 }
+
+export function ImageMedia({ src, label }: { src: string; label?: string }) {
+  const { url, error } = useMediaUrl(src, true)
+  return (
+    <figure className="my-4 inline-block max-w-full align-top sm:mr-4">
+      {error ? <p className="text-sm text-mark">{error}</p> : url ? (
+        <img src={url} alt={label ?? ''} className="max-h-80 rounded-xl border border-rule object-contain" />
+      ) : <div className="h-48 w-72 animate-pulse rounded-xl bg-rule" />}
+      {label && <figcaption className="mt-1 text-sm text-slate">{label}</figcaption>}
+    </figure>
+  )
+}

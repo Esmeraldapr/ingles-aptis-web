@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { isExternalCampus } from '../lib/lessons'
-import { AudioMedia, PdfMedia } from './StorageMedia'
+import { AudioMedia, ImageMedia, PdfMedia } from './StorageMedia'
 
 /** Renderizador mínimo para el contenido de las lecciones: títulos, listas y enlaces. */
 function inline(text: string): ReactNode[] {
@@ -41,14 +41,16 @@ export function Markdown({ source, skipFirstHeading = false }: { source: string;
     const line = raw.trimEnd()
     if (isExternalCampus(line)) continue
     // Material incrustado: [[pdf:URL|Título]] y [[audio:URL|Título]]
-    const media = line.match(/^\[\[(pdf|audio):([^|\]]+?)(?:\|(.+))?\]\]$/)
+    const media = line.match(/^\[\[(pdf|audio|img):([^|\]]+?)(?:\|(.+))?\]\]$/)
     if (media) {
       flush()
       const [, kind, url, label] = media
       blocks.push(
         kind === 'audio'
           ? <AudioMedia key={blocks.length} src={url} label={label} />
-          : <PdfMedia key={blocks.length} src={url} label={label} />,
+          : kind === 'img'
+            ? <ImageMedia key={blocks.length} src={url} label={label} />
+            : <PdfMedia key={blocks.length} src={url} label={label} />,
       )
       continue
     }
@@ -59,6 +61,8 @@ export function Markdown({ source, skipFirstHeading = false }: { source: string;
       blocks.push(<h2 key={blocks.length} className="mt-6 text-2xl font-bold">{inline(line.slice(3))}</h2>)
     } else if (line.startsWith('### ')) {
       blocks.push(<h3 key={blocks.length} className="mt-5 text-lg font-bold">{inline(line.slice(4))}</h3>)
+    } else if (line.startsWith('> ')) {
+      blocks.push(<blockquote key={blocks.length} className="my-2 rounded-lg border-l-4 border-turquesa bg-paper px-4 py-2 text-[0.95rem]">{inline(line.slice(2))}</blockquote>)
     } else if (line.trim()) {
       blocks.push(<p key={blocks.length} className="my-2">{inline(line)}</p>)
     }
